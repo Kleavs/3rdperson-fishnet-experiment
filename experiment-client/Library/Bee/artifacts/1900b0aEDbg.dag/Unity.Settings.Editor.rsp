@@ -107,10 +107,14 @@
 -define:ENABLE_TERRAIN
 -define:ENABLE_TILEMAP
 -define:ENABLE_TIMELINE
+-define:ENABLE_INPUT_SYSTEM
 -define:ENABLE_LEGACY_INPUT_MANAGER
 -define:TEXTCORE_FONT_ENGINE_1_5_OR_NEWER
+-define:FISHNET
+-define:FISHNET_V3
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
+-r:"Assets/FishNet/Plugins/CodeAnalysis/FishNet.CodeAnalysis.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2021.3.35f1/Editor/Data/Managed/UnityEditor.Graphs.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2021.3.35f1/Editor/Data/Managed/UnityEngine/UnityEditor.CoreModule.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2021.3.35f1/Editor/Data/Managed/UnityEngine/UnityEditor.DeviceSimulatorModule.dll"
@@ -341,6 +345,7 @@
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.TestRunner.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aEDbg.dag/UnityEngine.UI.ref.dll"
+-analyzer:"Assets/FishNet/Plugins/CodeAnalysis/FishNet.CodeAnalysis.Analyzers.dll"
 "Library/PackageCache/com.unity.settings-manager@1.0.3/Editor/Attributes.cs"
 "Library/PackageCache/com.unity.settings-manager@1.0.3/Editor/ISettingsRepository.cs"
 "Library/PackageCache/com.unity.settings-manager@1.0.3/Editor/PackageSettingsRepository.cs"
