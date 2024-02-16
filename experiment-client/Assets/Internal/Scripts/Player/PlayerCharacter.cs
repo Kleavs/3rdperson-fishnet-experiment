@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using DG.Tweening;
-using DG.Tweening.Core;
-using DG.Tweening.Plugins.Options;
+using Cinemachine;
 using Experiment.Strings;
 using FishNet.Object;
 using UnityEngine;
@@ -17,6 +12,7 @@ namespace Experiment.Player
         [SerializeField] private Animator _animator;
 
         [Header("Camera")]
+        [SerializeField] private CinemachineVirtualCamera _virtualCamera;
         [SerializeField] private float _cameraMoveSpeed = 10f;
         [SerializeField] private Transform _standingCameraPoint;
         [SerializeField] private Transform _crouchingCameraPoint;
@@ -42,7 +38,7 @@ namespace Experiment.Player
             _movement.Initialize(_isOwner, this);
             SetMovementState(PlayerMovementState.Standing);
             _movement.SetMovementState(PlayerMovementState.Standing);
-            // _cameraFollow.SetTarget(_standingCameraPoint);
+            _virtualCamera.m_Follow = _standingCameraPoint;
         }
 
         public void SetIdle(bool isIdle)
@@ -79,13 +75,13 @@ namespace Experiment.Player
                 switch (state)
                 {
                     case PlayerMovementState.Standing:
-                        // _cameraFollow.SetTarget(_standingCameraPoint);
+                        _virtualCamera.m_Follow = _standingCameraPoint;
                         break;
                     case PlayerMovementState.Crouching:
-                        // _cameraFollow.SetTarget(_crouchingCameraPoint);
+                        _virtualCamera.m_Follow = _crouchingCameraPoint;
                         break;
                     case PlayerMovementState.Proning:
-                        // _cameraFollow.SetTarget(_proningCameraPoint);
+                        _virtualCamera.m_Follow = _proningCameraPoint;
                         break;
                 }
             }
