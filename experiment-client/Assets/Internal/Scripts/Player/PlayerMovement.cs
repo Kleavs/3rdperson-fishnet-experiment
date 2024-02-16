@@ -12,7 +12,7 @@ namespace Experiment.Player
         [SerializeField] private float _standingRunSpeed = 8f;
         [SerializeField] private float _crouchingRunSpeed = 5f;
         [SerializeField] private float _proningRunSpeed = 3f;
-        [SerializeField] private float _rotationSpeed = 0.9f;
+        [SerializeField] private float _rotationSpeed = 5f;
 
         private PlayerInput _playerInput;
         private CharacterController _characterController;
@@ -99,7 +99,7 @@ namespace Experiment.Player
             move.y = 0f;
             var moveSpeed = GetCurrentStateMoveSpeed();
             _character.SetIdle(move == Vector3.zero);
-            _character.SetMovementVector(move.x, move.z);
+            _character.SetMovementVector(input.x, input.y);
 
             _characterController.Move(move * Time.deltaTime * moveSpeed);
             var targetRotation = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0);

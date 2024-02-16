@@ -215,7 +215,7 @@ MonoBehaviour:
   _standingRunSpeed: 8
   _crouchingRunSpeed: 5
   _proningRunSpeed: 3
-  _rotationSpeed: 0.9
+  _rotationSpeed: 5
 --- !u!143 &676119229
 CharacterController:
   m_ObjectHideFlags: 0
