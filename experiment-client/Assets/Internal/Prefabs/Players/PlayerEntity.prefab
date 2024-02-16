@@ -189,6 +189,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 709244fb2fb380c48b3f356bf01db164, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 8691918970896332031}
+  _networkObjectCache: {fileID: 8691918970896332031}
   _animator: {fileID: 6253700541617166603}
   _cameraMoveSpeed: 10
   _standingCameraPoint: {fileID: 1324088883393028405}
@@ -206,13 +209,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61c39db008d65144a9bf92da93a222a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 0
+  _componentIndexCache: 1
   _addedNetworkObject: {fileID: 8691918970896332031}
   _networkObjectCache: {fileID: 8691918970896332031}
   _standingRunSpeed: 8
   _crouchingRunSpeed: 5
   _proningRunSpeed: 3
-  _rotationSpeed: 0.5
+  _rotationSpeed: 0.9
 --- !u!143 &676119229
 CharacterController:
   m_ObjectHideFlags: 0
@@ -247,6 +250,7 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
   _networkBehaviours:
+  - {fileID: 2519538630440782322}
   - {fileID: 1475054570132667060}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
@@ -299,8 +303,8 @@ MonoBehaviour:
     m_ActionName: Player/Look
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2519538630440782322}
-        m_TargetAssemblyTypeName: Experiment.Player.PlayerCharacter, Assembly-CSharp
+      - m_Target: {fileID: 1475054570132667060}
+        m_TargetAssemblyTypeName: Experiment.Player.PlayerMovement, Assembly-CSharp
         m_MethodName: ToggleCrouchState
         m_Mode: 0
         m_Arguments:
@@ -315,8 +319,8 @@ MonoBehaviour:
     m_ActionName: Player/Crouch[/Keyboard/c]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2519538630440782322}
-        m_TargetAssemblyTypeName: Experiment.Player.PlayerCharacter, Assembly-CSharp
+      - m_Target: {fileID: 1475054570132667060}
+        m_TargetAssemblyTypeName: Experiment.Player.PlayerMovement, Assembly-CSharp
         m_MethodName: ToggleProneState
         m_Mode: 0
         m_Arguments:

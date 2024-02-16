@@ -5,56 +5,44 @@ using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
 using Experiment.Strings;
+using FishNet.Object;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Experiment.Player
 {
-    [RequireComponent(typeof(PlayerMovement)), RequireComponent(typeof(PlayerCharacter))]
-    public class PlayerCharacter : MonoBehaviour
+    [RequireComponent(typeof(PlayerMovement)), RequireComponent(typeof(PlayerInput))]
+    public class PlayerCharacter : NetworkBehaviour
     {
         [SerializeField] private Animator _animator;
-        [Header("Camera Positions")]
+
+        [Header("Camera")]
         [SerializeField] private float _cameraMoveSpeed = 10f;
         [SerializeField] private Transform _standingCameraPoint;
         [SerializeField] private Transform _crouchingCameraPoint;
         [SerializeField] private Transform _proningCameraPoint;
 
         private PlayerMovement _movement;
-        private PlayerCharacter _character;
-        private Camera _camera;
+        private PlayerInput _playerInput;
         private bool _isOwner;
-        private bool _isStanding;
-        private bool _isCrouching;
-        private bool _isProning;
-        private TweenerCore<Vector3, Vector3, VectorOptions> _cameraMoveTween;
+        private InputAction _lookInput;
 
         private void Awake()
         {
             _movement = GetComponent<PlayerMovement>();
-            _camera = Camera.main;
+            _playerInput = GetComponent<PlayerInput>();
             Initialize(true);
         }
 
         public void Initialize(bool isOwner)
         {
             _isOwner = isOwner;
-            _isStanding = true;
-            _isCrouching = false;
-            _isProning = false;
+            _lookInput = _playerInput.actions[InputActionStrings.PlayerAction.Look];
 
             _movement.Initialize(_isOwner, this);
             SetMovementState(PlayerMovementState.Standing);
             _movement.SetMovementState(PlayerMovementState.Standing);
-            AssignCameraToPlayer();
-        }
-
-        private void AssignCameraToPlayer()
-        {
-            if (_isOwner)
-            {
-                _camera.transform.parent = transform;
-            }
+            // _cameraFollow.SetTarget(_standingCameraPoint);
         }
 
         public void SetIdle(bool isIdle)
@@ -76,13 +64,9 @@ namespace Experiment.Player
 
         public void SetMovementState(PlayerMovementState state)
         {
-            _isStanding = state == PlayerMovementState.Standing;
-            _isCrouching = state == PlayerMovementState.Crouching;
-            _isProning = state == PlayerMovementState.Proning;
-
-            _animator.SetBool(AnimationStrings.VBot.Standing, _isStanding);
-            _animator.SetBool(AnimationStrings.VBot.Crouching, _isCrouching);
-            _animator.SetBool(AnimationStrings.VBot.Proning, _isProning);
+            _animator.SetBool(AnimationStrings.VBot.Standing, state == PlayerMovementState.Standing);
+            _animator.SetBool(AnimationStrings.VBot.Crouching, state == PlayerMovementState.Crouching);
+            _animator.SetBool(AnimationStrings.VBot.Proning, state == PlayerMovementState.Proning);
 
             MoveCameraToStatePosition(state);
             _movement.SetMovementState(state);
@@ -92,57 +76,17 @@ namespace Experiment.Player
         {
             if (_isOwner)
             {
-                // Clear previous tween, if it exists or currently processing
-                if (_cameraMoveTween != null)
-                {
-                    _cameraMoveTween.Kill();
-                    _cameraMoveTween = null;
-                }
-
                 switch (state)
                 {
                     case PlayerMovementState.Standing:
-                        _cameraMoveTween = _camera.transform.DOMove(
-                            _standingCameraPoint.position, _cameraMoveSpeed).SetSpeedBased();
+                        // _cameraFollow.SetTarget(_standingCameraPoint);
                         break;
                     case PlayerMovementState.Crouching:
-                        _cameraMoveTween = _camera.transform.DOMove(
-                            _crouchingCameraPoint.position, _cameraMoveSpeed).SetSpeedBased();
+                        // _cameraFollow.SetTarget(_crouchingCameraPoint);
                         break;
                     case PlayerMovementState.Proning:
-                        _cameraMoveTween = _camera.transform.DOMove(
-                            _proningCameraPoint.position, _cameraMoveSpeed).SetSpeedBased();
+                        // _cameraFollow.SetTarget(_proningCameraPoint);
                         break;
-                }
-            }
-        }
-
-        public void ToggleCrouchState(InputAction.CallbackContext context)
-        {
-            if (context.started)
-            {
-                if (_isCrouching)
-                {
-                    SetMovementState(PlayerMovementState.Standing);
-                }
-                else
-                {
-                    SetMovementState(PlayerMovementState.Crouching);
-                }
-            }
-        }
-
-        public void ToggleProneState(InputAction.CallbackContext context)
-        {
-            if (context.started)
-            {
-                if (_isProning)
-                {
-                    SetMovementState(PlayerMovementState.Standing);
-                }
-                else
-                {
-                    SetMovementState(PlayerMovementState.Proning);
                 }
             }
         }

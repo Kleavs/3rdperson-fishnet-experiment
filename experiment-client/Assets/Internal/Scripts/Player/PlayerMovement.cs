@@ -12,12 +12,15 @@ namespace Experiment.Player
         [SerializeField] private float _standingRunSpeed = 8f;
         [SerializeField] private float _crouchingRunSpeed = 5f;
         [SerializeField] private float _proningRunSpeed = 3f;
-        [SerializeField] private float _rotationSpeed = 0.5f;
+        [SerializeField] private float _rotationSpeed = 0.9f;
 
         private PlayerInput _playerInput;
         private CharacterController _characterController;
         private InputAction _moveInput;
         private PlayerMovementState _state;
+        private bool _isStanding;
+        private bool _isCrouching;
+        private bool _isProning;
         private bool _isOwner;
         private PlayerCharacter _character;
         private Camera _camera;
@@ -36,9 +39,49 @@ namespace Experiment.Player
             _moveInput = _playerInput.actions[InputActionStrings.PlayerAction.Move];
         }
 
+        public void ToggleCrouchState(InputAction.CallbackContext context)
+        {
+            if (_isOwner)
+            {
+                if (context.started)
+                {
+                    if (_isCrouching)
+                    {
+                        _character.SetMovementState(PlayerMovementState.Standing);
+                    }
+                    else
+                    {
+                        _character.SetMovementState(PlayerMovementState.Crouching);
+                    }
+                }
+            }
+        }
+
+        public void ToggleProneState(InputAction.CallbackContext context)
+        {
+            if (_isOwner)
+            {
+                if (context.started)
+                {
+                    if (_isProning)
+                    {
+                        _character.SetMovementState(PlayerMovementState.Standing);
+                    }
+                    else
+                    {
+                        _character.SetMovementState(PlayerMovementState.Proning);
+                    }
+                }
+            }
+        }
+
         public void SetMovementState(PlayerMovementState state)
         {
             _state = state;
+
+            _isStanding = state == PlayerMovementState.Standing;
+            _isCrouching = state == PlayerMovementState.Crouching;
+            _isProning = state == PlayerMovementState.Proning;
         }
 
         private void Update()
@@ -59,6 +102,9 @@ namespace Experiment.Player
             _character.SetMovementVector(move.x, move.z);
 
             _characterController.Move(move * Time.deltaTime * moveSpeed);
+            var targetRotation = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0);
+            transform.rotation = Quaternion.Lerp(
+                transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
         }
 
         private float GetCurrentStateMoveSpeed()

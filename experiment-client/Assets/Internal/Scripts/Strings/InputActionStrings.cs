@@ -9,5 +9,7 @@ namespace Experiment.Strings
     {
         public string Move = "Move";
         public string Look = "Look";
+        public string Crouch = "Crouch";
+        public string Prone = "Prone";
     }
 }
