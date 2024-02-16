@@ -1,0 +1,78 @@
+using Experiment.Strings;
+using FishNet.Object;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+namespace Experiment.Player
+{
+    [RequireComponent(typeof(PlayerInput)), RequireComponent(typeof(CharacterController))]
+    public class PlayerMovement : NetworkBehaviour
+    {
+        [Header("Configs")]
+        [SerializeField] private float _standingRunSpeed = 8f;
+        [SerializeField] private float _crouchingRunSpeed = 5f;
+        [SerializeField] private float _proningRunSpeed = 3f;
+        [SerializeField] private float _rotationSpeed = 0.5f;
+
+        private PlayerInput _playerInput;
+        private CharacterController _characterController;
+        private InputAction _moveInput;
+        private PlayerMovementState _state;
+        private bool _isOwner;
+        private PlayerCharacter _character;
+        private Camera _camera;
+
+        private void Awake()
+        {
+            _playerInput = GetComponent<PlayerInput>();
+            _characterController = GetComponent<CharacterController>();
+            _camera = Camera.main;
+        }
+
+        public void Initialize(bool isOwner, PlayerCharacter character)
+        {
+            _isOwner = isOwner;
+            _character = character;
+            _moveInput = _playerInput.actions[InputActionStrings.PlayerAction.Move];
+        }
+
+        public void SetMovementState(PlayerMovementState state)
+        {
+            _state = state;
+        }
+
+        private void Update()
+        {
+            if (!_isOwner)
+            {
+                return;
+            }
+
+            var input = _moveInput.ReadValue<Vector2>();
+            var move = new Vector3(input.x, 0, input.y);
+
+            // Take camera direction into action for player movement
+            move = move.x * _camera.transform.right + move.z * _camera.transform.forward;
+            move.y = 0f;
+            var moveSpeed = GetCurrentStateMoveSpeed();
+            _character.SetIdle(move == Vector3.zero);
+            _character.SetMovementVector(move.x, move.z);
+
+            _characterController.Move(move * Time.deltaTime * moveSpeed);
+        }
+
+        private float GetCurrentStateMoveSpeed()
+        {
+            switch (_state)
+            {
+                case PlayerMovementState.Standing:
+                    return _standingRunSpeed;
+                case PlayerMovementState.Crouching:
+                    return _crouchingRunSpeed;
+                case PlayerMovementState.Proning:
+                    return _proningRunSpeed;
+            }
+            return 0;
+        }
+    }
+}
