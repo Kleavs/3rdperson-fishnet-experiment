@@ -302,7 +302,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2519538630440782322}
         m_TargetAssemblyTypeName: Experiment.Player.PlayerCharacter, Assembly-CSharp
         m_MethodName: ToggleCrouchState
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -318,7 +318,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2519538630440782322}
         m_TargetAssemblyTypeName: Experiment.Player.PlayerCharacter, Assembly-CSharp
         m_MethodName: ToggleProneState
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
