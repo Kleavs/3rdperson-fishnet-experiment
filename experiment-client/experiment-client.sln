@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-firstpass", "Assembly-CSharp-firstpass.csproj", "{2F36ABCA-B7BC-322D-E45A-02BD048B81D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParrelSync", "ParrelSync.csproj", "{97F2645C-7068-F41A-C442-BD82E57096FC}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FishNet.Codegen.Cecil", "FishNet.Codegen.Cecil.csproj", "{B3DD4DBE-6CD8-330E-7312-B5D1D2C55A63}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.FishNet.Codegen", "Unity.FishNet.Codegen.csproj", "{598D8D59-E26A-3F00-D01F-C4B3438FD6CE}"
@@ -47,6 +49,10 @@ Global
 		{2F36ABCA-B7BC-322D-E45A-02BD048B81D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F36ABCA-B7BC-322D-E45A-02BD048B81D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F36ABCA-B7BC-322D-E45A-02BD048B81D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97F2645C-7068-F41A-C442-BD82E57096FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97F2645C-7068-F41A-C442-BD82E57096FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97F2645C-7068-F41A-C442-BD82E57096FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97F2645C-7068-F41A-C442-BD82E57096FC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3DD4DBE-6CD8-330E-7312-B5D1D2C55A63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B3DD4DBE-6CD8-330E-7312-B5D1D2C55A63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3DD4DBE-6CD8-330E-7312-B5D1D2C55A63}.Release|Any CPU.ActiveCfg = Release|Any CPU

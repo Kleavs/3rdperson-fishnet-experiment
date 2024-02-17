@@ -6,72 +6,100 @@ using UnityEngine.InputSystem;
 
 namespace Experiment.Player
 {
-    [RequireComponent(typeof(PlayerMovement)), RequireComponent(typeof(PlayerInput))]
+    [RequireComponent(typeof(PlayerMovement))]
     public class PlayerCharacter : NetworkBehaviour
     {
         [SerializeField] private Animator _animator;
 
         [Header("Camera")]
-        [SerializeField] private CinemachineVirtualCamera _virtualCamera;
-        [SerializeField] private float _cameraMoveSpeed = 10f;
         [SerializeField] private Transform _standingCameraPoint;
         [SerializeField] private Transform _crouchingCameraPoint;
         [SerializeField] private Transform _proningCameraPoint;
 
+        private CinemachineVirtualCamera _virtualCamera;
         private PlayerMovement _movement;
-        private PlayerInput _playerInput;
-        private bool _isOwner;
-        private InputAction _lookInput;
 
         private void Awake()
         {
             _movement = GetComponent<PlayerMovement>();
-            _playerInput = GetComponent<PlayerInput>();
-            Initialize(true);
+            _virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+            Initialize();
         }
 
-        public void Initialize(bool isOwner)
+        public void Initialize()
         {
-            _isOwner = isOwner;
-            _lookInput = _playerInput.actions[InputActionStrings.PlayerAction.Look];
-
-            _movement.Initialize(_isOwner, this);
+            _movement.Initialize(this);
             SetMovementState(PlayerMovementState.Standing);
             _movement.SetMovementState(PlayerMovementState.Standing);
-            _virtualCamera.m_Follow = _standingCameraPoint;
         }
 
-        public void SetIdle(bool isIdle)
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            if (base.IsOwner)
+            {
+                if (_virtualCamera != null)
+                {
+                    _virtualCamera.m_Follow = _standingCameraPoint;
+                }
+            }
+        }
+
+        [ObserversRpc]
+        private void SetIdle(bool isIdle)
         {
             _animator.SetBool(AnimationStrings.VBot.Idle, isIdle);
         }
 
-        public void SetMovementVector(float x, float z)
+        [ServerRpc]
+        public void SetIdleServer(bool isIdle)
+        {
+            SetIdle(isIdle);
+        }
+
+        [ObserversRpc]
+        private void SetMovementVector(float x, float z)
         {
             _animator.SetFloat(AnimationStrings.VBot.X, x);
             _animator.SetFloat(AnimationStrings.VBot.Z, z);
         }
 
-        public void SetTurnValue(float value)
+        [ServerRpc]
+        public void SetMovementVectorServer(float x, float z)
         {
-            _animator.SetBool(AnimationStrings.VBot.Turning, value != 0);
-            _animator.SetFloat(AnimationStrings.VBot.Turn, value);
+            SetMovementVector(x, z);
         }
 
         public void SetMovementState(PlayerMovementState state)
         {
-            _animator.SetBool(AnimationStrings.VBot.Standing, state == PlayerMovementState.Standing);
-            _animator.SetBool(AnimationStrings.VBot.Crouching, state == PlayerMovementState.Crouching);
-            _animator.SetBool(AnimationStrings.VBot.Proning, state == PlayerMovementState.Proning);
-
+            SetAnimationStateServer(state);
             MoveCameraToStatePosition(state);
             _movement.SetMovementState(state);
         }
 
+        [ObserversRpc]
+        private void SetAnimationState(PlayerMovementState state)
+        {
+            _animator.SetBool(AnimationStrings.VBot.Standing, state == PlayerMovementState.Standing);
+            _animator.SetBool(AnimationStrings.VBot.Crouching, state == PlayerMovementState.Crouching);
+            _animator.SetBool(AnimationStrings.VBot.Proning, state == PlayerMovementState.Proning);
+        }
+
+        [ServerRpc]
+        private void SetAnimationStateServer(PlayerMovementState state)
+        {
+            SetAnimationState(state);
+        }
+
         private void MoveCameraToStatePosition(PlayerMovementState state)
         {
-            if (_isOwner)
+            if (IsOwner)
             {
+                if (_virtualCamera == null)
+                {
+                    return;
+                }
+
                 switch (state)
                 {
                     case PlayerMovementState.Standing:

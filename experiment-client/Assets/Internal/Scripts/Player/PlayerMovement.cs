@@ -21,7 +21,6 @@ namespace Experiment.Player
         private bool _isStanding;
         private bool _isCrouching;
         private bool _isProning;
-        private bool _isOwner;
         private PlayerCharacter _character;
         private Camera _camera;
 
@@ -30,18 +29,17 @@ namespace Experiment.Player
             _playerInput = GetComponent<PlayerInput>();
             _characterController = GetComponent<CharacterController>();
             _camera = Camera.main;
+            _moveInput = _playerInput.actions[InputActionStrings.PlayerAction.Move];
         }
 
-        public void Initialize(bool isOwner, PlayerCharacter character)
+        public void Initialize(PlayerCharacter character)
         {
-            _isOwner = isOwner;
             _character = character;
-            _moveInput = _playerInput.actions[InputActionStrings.PlayerAction.Move];
         }
 
         public void ToggleCrouchState(InputAction.CallbackContext context)
         {
-            if (_isOwner)
+            if (IsOwner)
             {
                 if (context.started)
                 {
@@ -59,7 +57,7 @@ namespace Experiment.Player
 
         public void ToggleProneState(InputAction.CallbackContext context)
         {
-            if (_isOwner)
+            if (IsOwner)
             {
                 if (context.started)
                 {
@@ -86,7 +84,7 @@ namespace Experiment.Player
 
         private void Update()
         {
-            if (!_isOwner)
+            if (!IsOwner)
             {
                 return;
             }
@@ -98,8 +96,8 @@ namespace Experiment.Player
             move = move.x * _camera.transform.right + move.z * _camera.transform.forward;
             move.y = 0f;
             var moveSpeed = GetCurrentStateMoveSpeed();
-            _character.SetIdle(move == Vector3.zero);
-            _character.SetMovementVector(input.x, input.y);
+            _character.SetIdleServer(move == Vector3.zero);
+            _character.SetMovementVectorServer(input.x, input.y);
 
             _characterController.Move(move * Time.deltaTime * moveSpeed);
             var targetRotation = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0);
